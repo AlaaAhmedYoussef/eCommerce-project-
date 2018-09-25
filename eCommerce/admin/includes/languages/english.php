@@ -5,10 +5,18 @@
 
 		static $lang =  array(
 
-			// Navbar links
+			// Dashboard Page
 
-			'HOME_ADMIN' => 'Home',
-			
+			//Navbar links
+
+			'HOME_ADMIN' 	=> 'Home' ,
+			'CATEGORIES' 	=> 'Categories' ,
+			'ITEMS' 		=> 'items' ,
+ 			'MEMBERS' 		=> 'Members' ,
+ 			'STATISTICS' 		=> 'Statistics' ,
+ 			'LOGS' 		=> 'Logs' ,
+
+ 			'' => '',
 
 			// //Home Page
 			// 'MESSAGE' => 'Welcome' ,
