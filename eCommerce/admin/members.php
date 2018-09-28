@@ -23,8 +23,187 @@ session_start();
 			if ($do == 'Manage'){
 				echo 'manage';
 				//here manage page
+				echo "<a href='?do=Add'>Add Members</a>";
 
-			} elseif ($do == 'Edit') {  //edit page 
+
+			} elseif ($do == 'Add') {  //Add members page ?>
+				
+				<div class="container">
+				 	<h1 class="text-center" >Add New Member</h1>
+				 	<form class="form-horizontal" method="POST" action="?do=Insert" > 
+						
+					
+				 		<!-- Start Username field-->
+				 		<div class="form-group form-group-lg">
+				 			<label class="col-sm-2 control-label">Username</label>
+				 			<div class="col-sm-10 col-md-6">
+				 				<input type="text" name="username" class="form-control"  autocomplete="off" required= "required" placeholder="Username to login">
+				 			</div>	
+				 		</div>
+				 		<!-- End Username field-->
+
+						<!-- Start Password field-->
+						<div class="form-group form-group-lg">
+				 			<label class="col-sm-2 control-label">Password</label>
+				 			<div class="col-sm-10 col-md-6">
+
+				 			<input type="password" name="password" class="password form-control" autocomplete="new-password" required= "required" placeholder="password must be Hard & Complex">
+							<i class="show-pass fa fa-eye fa-2x"></i>
+				 			</div>	
+				 		</div>
+				 		<!-- start email field-->
+				 		<div class="form-group form-group-lg">
+				 			<label class="col-sm-2 control-label">Email</label>
+				 			<div class="col-sm-10 col-md-6">
+				 				<input type="email" name="email" class="form-control"  required= "required" placeholder="Email must be Valid">
+				 			</div>	
+				 		</div>
+				 		<!-- End email field-->
+
+				 		<div class="form-group form-group-lg">
+				 			<label class="col-sm-2 control-label">Fullname</label>
+				 			<div class="col-sm-10 col-md-6">
+				 				<input type="text" name="Fullname" class="form-control"  required= "required" placeholder="Full name appears in your profile page">
+				 			</div>	
+				 		</div>
+				 		<!-- End Fullname field-->
+
+				 		<!-- Start submit field-->
+				 		<div class="form-group form-group-lg">
+				 			<div class="col-sm-offset-2 col-sm-10">
+				 				<input type="submit" value="Add Member" class="btn btn-primary btn-lg">
+				 			</div>	
+				 		</div>
+				 		<!-- End submit field-->
+
+				 	</form>
+				 </div>
+
+			<?php  
+			} elseif ($do == 'Insert') {  // for insert
+
+				// echo $_POST['username'] . $_POST['password'] . $_POST['email'] .$_POST['Fullname'];
+				
+				if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+			 		echo "<h1 class='text-center'> Insert members </h1>";
+			 		echo "<div class='container'>";
+				 		
+				 	$username = $_POST['username'];	
+				 	$email = $_POST['email'];	
+				 	$fullname = $_POST['Fullname'];	
+				 		
+				 	
+
+				 	// password trick 
+
+				 	$pass = $_POST['password'];
+
+				 	$hashedPass = sha1($_POST['password']);
+
+				 	// validation for the form 
+
+				 	$formErrors = array();
+
+
+
+				 	// if(empty($username))
+				 	// {
+				 	// 	$formErrors[] = "<div class='alert alert-danger'>username cant be <strong>empty</strong> </div>";
+				 	// 	} elseif (strlen($username) < 4) {
+				 	// 		$formErrors[] = "<div class='alert alert-danger'>username cant be less than <strong>4 characters </strong> </div>";
+				 	// 	} elseif(strlen($username) > 20){
+				 	// 		$formErrors[] = "<div class='alert alert-danger'>username cant be more than <strong>20 characters </strong> </div>";
+				 	// }
+
+				 	// if(empty($email))
+				 	// {
+				 	// 	$formErrors[] = "<div class='alert alert-danger'>email cant be <strong>empty</strong> </div>";
+				 	// }
+
+				 	// if(empty($fullname))
+				 	// {
+				 	// 	$formErrors[] = "<div class='alert alert-danger'>fullname cant be <strong>empty</strong> </div>";
+				 	// }
+
+				 	// foreach ($formErrors as $error) {
+				 		
+				 	// 	echo $error . "<br/>";
+				 	// }
+
+				 	// this way is better 
+
+				 	if(empty($username))
+				 	{
+				 		$formErrors[] = "username cant be <strong>empty</strong> ";
+				 		} elseif (strlen($username) < 4) {
+				 			$formErrors[] = "username cant be less than <strong>4 characters </strong> ";
+				 		} elseif(strlen($username) > 20){
+				 			$formErrors[] = "username cant be more than <strong>20 characters </strong> ";
+				 	}
+
+					if(empty($pass))
+				 	{
+				 		$formErrors[] = "password cant be <strong>empty</strong> ";
+				 	}
+				 	if(empty($email))
+				 	{
+				 		$formErrors[] = "email cant be <strong>empty</strong> ";
+				 	}
+
+				 	if(empty($fullname))
+				 	{
+				 		$formErrors[] = "fullname cant be <strong>empty</strong> ";
+				 	}
+
+				 	foreach ($formErrors as $error) {
+				 		
+				 		echo "<div class='alert alert-danger'>" . $error . "</div>";
+				 	}
+
+
+
+				 	// if there is no error insert to DB
+
+				 	 if(empty($formErrors)) {
+
+				 	 	// insert the DB with this info
+				 	 	$stmt = $conn->prepare("INSERT INTO Users (Username, Password, Email, FullName) 
+				 	 		VALUES (:zname, :zpass, :zmail, :zfull)"); 
+
+				 	 	$stmt->execute(array(
+						 	
+						 	'zname'     	=> 	$username,
+						 	'zpass' 		=> 	$hashedPass, 
+						 	'zmail'		=> 	$email, 
+						 	'zfull' 		=>	$fullname
+						 	
+						 ));
+
+				 	 	echo  "<div class='alert alert-success'>" . $stmt->rowCount() . " record is Inserted </div>";
+					// echo $_POST['username'];	
+				 // 	echo  $_POST['email'];	
+				 // 	echo  $_POST['Fullname'];	
+				 		
+				 	
+
+				 // 	// password trick 
+
+				 // 	echo  $_POST['password'];
+
+				 // 	echo  sha1($_POST['password']);
+				 	 }
+				 	
+
+
+				} else {
+					echo "you can't browser this page directly" ; 
+				}
+
+				echo "</div>";
+
+
+			} elseif ($do == 'Edit') {  //edit member page 
 
 				// if ( isset($_GET['userid']) && is_numeric($_GET['userid'])) {
 
@@ -47,7 +226,7 @@ session_start();
 
 				
 				
-				if ($count > 0 ) { 
+				if ($count > 0 ) {  
 
 					// echo "This is the edit form";
 					// echo $row['Username'] . " " . $row['Password'] ;
@@ -67,7 +246,7 @@ session_start();
 				 		<div class="form-group form-group-lg">
 				 			<label class="col-sm-2 control-label">Username</label>
 				 			<div class="col-sm-10 col-md-6">
-				 				<input type="text" name="username" class="form-control" value="<?php echo $row['Username']; ?>" autocomplete="off" required= "required">
+				 				<input type="text" name="username" class="form-control" value="<?php echo $row['Username']; ?>" autocomplete="off">
 				 			</div>	
 				 		</div>
 				 		<!-- End Username field-->
@@ -78,7 +257,7 @@ session_start();
 				 			<div class="col-sm-10 col-md-6">
 
 				 				<input type="hidden" name="oldpassword" value="<?php echo $row['Password']; ?>">
-				 				<input type="password" name="newpassword" class="form-control" autocomplete="new-password" placeholder="Leave it blank if you don't need to change it">
+				 				<input type="password" name="newpassword" class="form-control" autocomplete="new-password">
 				 			</div>	
 				 		</div>
 
@@ -96,7 +275,7 @@ session_start();
 				 		<div class="form-group form-group-lg">
 				 			<label class="col-sm-2 control-label">Email</label>
 				 			<div class="col-sm-10 col-md-6">
-				 				<input type="email" name="email" class="form-control" value="<?php echo $row['Email']; ?>"  required= "required">
+				 				<input type="email" name="email" class="form-control" value="<?php echo $row['Email']; ?>">
 				 			</div>	
 				 		</div>
 				 		<!-- End email field-->
@@ -104,7 +283,7 @@ session_start();
 				 		<div class="form-group form-group-lg">
 				 			<label class="col-sm-2 control-label">Fullname</label>
 				 			<div class="col-sm-10 col-md-6">
-				 				<input type="text" name="Fullname" class="form-control" value="<?php echo $row['FullName']; ?>" required= "required">
+				 				<input type="text" name="Fullname" class="form-control" value="<?php echo $row['FullName']; ?>">
 				 			</div>	
 				 		</div>
 				 		<!-- End Fullname field-->
@@ -121,7 +300,7 @@ session_start();
 				 </div>
 			<?php  
 			// if this id not exist
-				}  else {
+				}  else {   // else for  "if cout > 0" 
 				echo "wrong id";
 			}
 
@@ -137,8 +316,7 @@ session_start();
 			 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 			 		echo "<h1 class='text-center'> Update members </h1>";
-			 		echo "<div class='container'>"
-			 		;
+			 		echo "<div class='container'>";
 				 	$userid = $_POST['userid'];	
 				 	$username = $_POST['username'];	
 				 	$email = $_POST['email'];	
@@ -173,28 +351,29 @@ session_start();
 
 				 	$formErrors = array();
 
+
 				 	if(empty($username))
 				 	{
-				 		$formErrors[] = "<div class='alert alert-danger'>username cant be <strong>empty</strong> </div>";
+				 		$formErrors[] = "username cant be <strong>empty</strong> ";
 				 		} elseif (strlen($username) < 4) {
-				 			$formErrors[] = "<div class='alert alert-danger'>username cant be less than <strong>4 characters </strong> </div>";
+				 			$formErrors[] = "username cant be less than <strong>4 characters </strong> ";
 				 		} elseif(strlen($username) > 20){
-				 			$formErrors[] = "<div class='alert alert-danger'>username cant be more than <strong>20 characters </strong> </div>";
+				 			$formErrors[] = "username cant be more than <strong>20 characters </strong> ";
 				 	}
 
 				 	if(empty($email))
 				 	{
-				 		$formErrors[] = "<div class='alert alert-danger'>email cant be <strong>empty</strong> </div>";
+				 		$formErrors[] = "email cant be <strong>empty</strong> ";
 				 	}
 
 				 	if(empty($fullname))
 				 	{
-				 		$formErrors[] = "<div class='alert alert-danger'>fullname cant be <strong>empty</strong> </div>";
+				 		$formErrors[] = "fullname cant be <strong>empty</strong> ";
 				 	}
 
 				 	foreach ($formErrors as $error) {
 				 		
-				 		echo $error . "<br/>";
+				 		echo "<div class='alert alert-danger'>" . $error . "</div>";
 				 	}
 
 
@@ -211,13 +390,22 @@ session_start();
 				 	}
 				 	
 
-				 	
 
-				echo "</div>"; // for container
+				 	//update the DB with this info
+
+				 // 	$stmt = $conn->prepare("UPDATE  Users  SET  Username = ?, Email = ?, FullName = ?, Password = ? WHERE UserID = ?");  //means 1 result
+
+					// $stmt->execute(array($username, $email, $fullname, $pass, $userid));
+					
+					// echo $stmt->rowCount() . " record is updated";
+
+				
 
 				} else {
-					echo 'that isn\'t a post request'; 
+					echo "you can't browser this page directly" ; 
 				}
+
+				echo "</div>";
 			 }
 			
 			include $tpl . 'footer.php'; 
