@@ -1,2 +1,2 @@
 # eCommerce-project-
-eCommerce project with plain php with jquery and bootstarp
+eCommerce project using plain php with jquery and bootstarp
