@@ -104,4 +104,8 @@ h1 {
 
 }
 
+.main-table tr:first-child td{ /*we can use Thead instead*/
+	background-color: #333;
+	color: #FFF;
+}
 /*end members page*/

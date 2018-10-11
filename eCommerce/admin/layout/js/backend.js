@@ -41,6 +41,16 @@ $(function () {
 	 	passField.attr('type', 'password');
 
 	 });
+
+
+	 // confirmation message to insure that you wanna delete the member
+
+	 $('.confirm').click(function (){
+
+	 	return confirm('Are you sure?');
+	 	
+	 });
+
 });
 
 

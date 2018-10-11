@@ -20,13 +20,59 @@ session_start();
 
 			//start manage page 
 
-			if ($do == 'Manage'){
-				echo 'manage';
-				//here manage page
-				echo "<a href='?do=Add'>Add Members</a>";
+			if ($do == 'Manage'){ // for manage page
 
+				// get all data fro DB to use it 
 
-			} elseif ($do == 'Add') {  //Add members page ?>
+				$stmt = $conn->prepare("SELECT * FROM Users WHERE  GroupID != 1"); 
+
+				 $stmt->execute();
+
+				 $rows = $stmt->fetchAll();
+
+				?> 
+			
+				<div class="container">
+
+				 	<h1 class="text-center" >Manage Members</h1>
+					<div class="table-reponsive">
+						<table class="main-table text-center table table-bordered">
+							<tr>
+								<td>#ID</td>
+								<td>Username</td>
+								<td>Email</td>
+								<td>Full Name</td>
+								<td>Registered Date</td>
+								<td>Control</td>
+							</tr>
+
+							<?php 
+								foreach ($rows as $row) {
+									echo "<tr>";
+										echo "<td>" . $row['UserID'] . "</td>";
+										echo "<td>" . $row['Username'] . "</td>";
+										echo "<td>" . $row['Email'] . "</td>";
+										echo "<td>" . $row['FullName'] . "</td>";
+										echo "<td>" . " " . "</td>";
+										echo "<td>
+											<a href='members.php?do=Edit&userid=" . $row['UserID'] . " ' class='btn btn-success'>Edit</a> 
+										 	<a href='members.php?do=Delete&userid=" . $row['UserID'] . " ' class='btn btn-danger confirm'>Delete</a>
+										       </td>";
+									echo "</tr>";	
+								}
+								
+							 ?>
+							
+
+							
+						</table>
+					</div>
+					
+		
+					<a href='members.php?do=Add' class="btn btn-primary"> <i class="fa fa-plus"></i> Add New Member</a>
+				</div>
+
+			<?php  } elseif ($do == 'Add') {  //Add members page ?>
 				
 				<div class="container">
 				 	<h1 class="text-center" >Add New Member</h1>
@@ -406,6 +452,40 @@ session_start();
 				}
 
 				echo "</div>";
+
+			 } elseif ($do == 'Delete') { //Delete member page
+
+			 	echo "<h1 class='text-center'> Deleted members </h1>";
+			 		echo "<div class='container'>";
+
+			 	$userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+				
+
+				//check if UserID exist in DB
+
+				$stmt = $conn->prepare("SELECT *  FROM  Users  WHERE  UserID = ? LIMIT 1");  //means 1 result
+
+				$stmt->execute(array($userid));
+				
+				$count = $stmt->rowCount();
+
+				
+				
+				if ($count > 0 ) {  
+
+					$stmt = $conn->prepare("DELETE FROM Users WHERE UserID = :zuser");  //means 1 result
+
+					$stmt->bindParam(":zuser", $userid);
+
+					$stmt->execute();
+						
+					echo  "<div class='alert alert-success'>" . $stmt-> rowCount() . " record is deleted </div>";
+
+			 	} else {
+			 		echo "This ID is not exist";
+			 	}
+
+			 	echo "</div>";
 			 }
 			
 			include $tpl . 'footer.php'; 
