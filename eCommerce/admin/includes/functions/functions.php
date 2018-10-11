@@ -30,4 +30,21 @@
 
 	}
 
+
+	/*  	redirectHome function [accept parameters]
+		$errorMsg = echo the error message
+		$seconds = wait seconds before redirecting 
+	*/	
+
+	function redirectHome($errorMsg, $seconds = 3)   {
+
+		echo "<div class='alert alert-danger'>$errorMsg</div>";
+
+		echo "<div class='alert alert-info'>You will be Redirected to Homepage After $seconds Seconds.</div>";
+
+		header("refresh:$seconds;url=index.php");
+		
+		exit();
+	}
+
  ?>

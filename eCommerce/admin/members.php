@@ -243,7 +243,9 @@ session_start();
 
 
 				} else {
-					echo "you can't browser this page directly" ; 
+					$errorMsg = "Sorry you can't browser this page directly" ; 
+
+					redirectHome($errorMsg);
 				}
 
 				echo "</div>";
