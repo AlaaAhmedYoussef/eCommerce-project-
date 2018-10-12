@@ -104,8 +104,23 @@ h1 {
 
 }
 
+.main-table {
+	-webkit-box-shadow: 0 3px 10px #CCC;
+	-moz-box-shadow: 0 3px 10px #CCC;
+	box-shadow: 0 3px 10px #CCC;
+}
+
+.main-table td {
+	background-color: #FFF;
+	vertical-align: middle !important;
+}
+
 .main-table tr:first-child td{ /*we can use Thead instead*/
 	background-color: #333;
 	color: #FFF;
+}
+
+.main-table .btn {
+	padding: 3px 10px;
 }
 /*end members page*/
