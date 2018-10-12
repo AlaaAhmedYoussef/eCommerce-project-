@@ -58,7 +58,7 @@ session_start();
 										echo "<td>" . $row['Username'] . "</td>";
 										echo "<td>" . $row['Email'] . "</td>";
 										echo "<td>" . $row['FullName'] . "</td>";
-										echo "<td>" . " " . "</td>";
+										echo "<td>" . $row['Date']  . "</td>";
 										echo "<td>
 											<a href='members.php?do=Edit&userid=" . $row['UserID'] . " ' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a> 
 										 	<a href='members.php?do=Delete&userid=" . $row['UserID'] . " ' class='btn btn-danger confirm'><i class='fa fa-close'></i>Delete</a>
@@ -237,12 +237,14 @@ session_start();
 
 				 	 	if ($check == 1)  {
 
-				 	 		echo "Sorry This User is Exist";
+				 	 		$theMsg = "<div class='alert alert-danger'> Sorry This User is Exist </div>";
+
+				 	 		redirectHome($theMsg, 'back');
 
 				 	 	} else {
 					 	 	// insert the DB with this info
-					 	 	$stmt = $conn->prepare("INSERT INTO Users (Username, Password, Email, FullName) 
-					 	 		VALUES (:zname, :zpass, :zmail, :zfull)"); 
+					 	 	$stmt = $conn->prepare("INSERT INTO Users (Username, Password, Email, FullName, Date) 
+					 	 		VALUES (:zname, :zpass, :zmail, :zfull, now())"); 
 
 					 	 	$stmt->execute(array(
 							 	
@@ -508,15 +510,22 @@ session_start();
 
 					//check if UserID exist in DB
 
-					$stmt = $conn->prepare("SELECT *  FROM  Users  WHERE  UserID = ? LIMIT 1");  //means 1 result
+					// $stmt = $conn->prepare("SELECT *  FROM  Users  WHERE  UserID = ? LIMIT 1");  //means 1 result
 
-					$stmt->execute(array($userid));
+					// $stmt->execute(array($userid));
 					
-					$count = $stmt->rowCount();
+					// $count = $stmt->rowCount();
 
+
+					// check if UserID exist in DB with the function
+
+					$check = checkItem('UserID', 'Users', $userid); 
+
+					// echo $check;
 					
-					
-					if ($count > 0 ) {  
+					// if the ID is exist 
+					//if ($count > 0 )
+					if ($check > 0 ) {  
 
 						$stmt = $conn->prepare("DELETE FROM Users WHERE UserID = :zuser");  //means 1 result
 
@@ -526,7 +535,7 @@ session_start();
 							
 						$theMsg = "<div class='alert alert-success'>" . $stmt-> rowCount() . " record is deleted </div>";
 
-						redirectHome($theMsg, 'back');
+						redirectHome($theMsg);
 
 				 	} else {
 
