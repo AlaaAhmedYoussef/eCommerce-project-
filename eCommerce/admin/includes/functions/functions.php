@@ -114,4 +114,44 @@
 
 		return $count;		// not echo because you dont need to print it	     
 	}
+
+
+	/* countItems()  v1.0	
+	thiss function count the number of items [accept parameters]
+	$item = the item to count  ex: UserID, ...
+	$table = the table to choose from ex: Users, ...
+	*/
+
+	function countItems($item, $table)  {
+
+		global $conn; // should use the global $conn from the connect.php
+
+		$stmt2 = $conn->prepare("SELECT COUNT($item) FROM $table");
+
+		$stmt2->execute();
+
+		return $stmt2->fetchColumn();
+	}	
+
+	/* getLatest()  v1.0	
+	this function get the lastest items [Users , Items, Comments, ...] [accept parameters]
+	$select = the Item to select [example for item can be  "user , item, category, ..."]
+	$table = the table to select from  [example for the table  "users , items , categories, ..."]
+	$order = it is desc for the element ex [UserID , CatergoryID, ...]
+	$limit = the number of Records to get 
+	*/
+
+	function getLatest($select, $table, $order, $limit = 5)
+	{
+		
+		global $conn; // should use the global $conn from the connect.php
+
+		$getStmt = $conn->prepare("SELECT $select FROM $table ORDER BY $order DESC LIMIT $limit ");
+
+		$getStmt->execute();
+
+		$rows = $getStmt->fetchAll();
+
+		return $rows;
+	}
  ?>

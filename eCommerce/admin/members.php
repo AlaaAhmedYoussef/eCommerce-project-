@@ -26,10 +26,20 @@ session_start();
 
 				// checkItem("Username", "Users", "alaa");
 
+				// for pending page 
+
+				$query = ' ';
+
+				if (isset($_GET['page'])  && $_GET['page'] == 'Pending') {
+					
+					$query = 'AND RegStatus = 0';
+				}
+
+
 
 				// get all data fro DB to use it 
 
-				$stmt = $conn->prepare("SELECT * FROM Users WHERE  GroupID != 1"); 
+				$stmt = $conn->prepare("SELECT * FROM Users WHERE  GroupID != 1 $query"); 
 
 				 $stmt->execute();
 
@@ -61,8 +71,16 @@ session_start();
 										echo "<td>" . $row['Date']  . "</td>";
 										echo "<td>
 											<a href='members.php?do=Edit&userid=" . $row['UserID'] . " ' class='btn btn-success'><i class='fa fa-edit'></i> Edit</a> 
-										 	<a href='members.php?do=Delete&userid=" . $row['UserID'] . " ' class='btn btn-danger confirm'><i class='fa fa-close'></i>Delete</a>
-										       </td>";
+										 	<a href='members.php?do=Delete&userid=" . $row['UserID'] . " ' class='btn btn-danger confirm'><i class='fa fa-close'></i>Delete</a>";
+
+										 	if($row['RegStatus'] == 0)  {
+
+										 	echo "<a href='members.php?do=Activate&userid=" . $row['UserID'] . " ' class='btn btn-info activate'><i class='fa fa-close'></i> Activate</a>";
+
+										     	}
+										     	
+										echo  "</td>";
+										 	
 									echo "</tr>";	
 								}
 								
@@ -224,7 +242,9 @@ session_start();
 				 	foreach ($formErrors as $error) {
 				 		
 				 		echo "<div class='alert alert-danger'>" . $error . "</div>";
+
 				 	}
+				 	
 
 
 
@@ -243,8 +263,8 @@ session_start();
 
 				 	 	} else {
 					 	 	// insert the DB with this info
-					 	 	$stmt = $conn->prepare("INSERT INTO Users (Username, Password, Email, FullName, Date) 
-					 	 		VALUES (:zname, :zpass, :zmail, :zfull, now())"); 
+					 	 	$stmt = $conn->prepare("INSERT INTO Users (Username, Password, Email, FullName, RegStatus, Date) 
+					 	 		VALUES (:zname, :zpass, :zmail, :zfull, 1, now())"); 
 
 					 	 	$stmt->execute(array(
 							 	
@@ -545,6 +565,45 @@ session_start();
 				 	}
 
 			 	echo "</div>";
+
+			 }  elseif ($do == 'Activate') { //for active pending member
+			 	
+			 	echo "<h1 class='text-center'> Activated member </h1>";
+			 	echo "<div class='container'>";
+
+			 		// check if get request for userid 
+
+				 	$userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+					
+					
+					// check if UserID exist in DB with the function
+
+					$check = checkItem('UserID', 'Users', $userid); 
+
+					// echo $check;
+					
+					// if the ID is exist 
+					//if ($count > 0 )
+					if ($check > 0 ) {  
+
+						$stmt = $conn->prepare("UPDATE  Users SET RegStatus = 1 WHERE UserID = ? ");  
+
+						$stmt->execute(array($userid));
+							
+						$theMsg = "<div class='alert alert-success'>" . $stmt-> rowCount() . " Record is Activated </div>";
+
+						redirectHome($theMsg);
+
+				 	} else {
+
+				 		$theMsg = "<div class='alert alert-danger'>This ID is not exist</div>";
+
+				 		redirectHome($theMsg);
+				 	}
+
+			 	echo "</div>";
+
+
 			 }
 			
 			include $tpl . 'footer.php'; 
