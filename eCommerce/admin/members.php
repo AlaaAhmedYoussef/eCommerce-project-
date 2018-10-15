@@ -4,13 +4,14 @@
    manage members page
    you can Add | Edit | Delete members from here 
 */
+   	ob_start();   // Output buffering start .. wait for header to be sent first 
 
-session_start();
+	session_start();
+
+		$pageTitle ='Members';
 		
 		if (isset($_SESSION['Username'])) {
-
-			$pageTitle ='Members';
-
+			
 			include 'init.php';
 
 			//here all things go 
@@ -39,7 +40,7 @@ session_start();
 
 				// get all data fro DB to use it 
 
-				$stmt = $conn->prepare("SELECT * FROM Users WHERE  GroupID != 1 $query"); 
+				$stmt = $conn->prepare("SELECT * FROM users WHERE  GroupID != 1 $query"); 
 
 				 $stmt->execute();
 
@@ -78,7 +79,7 @@ session_start();
 										 	echo "<a href='members.php?do=Activate&userid=" . $row['UserID'] . " ' class='btn btn-info activate'><i class='fa fa-close'></i> Activate</a>";
 
 										     	}
-										     	
+
 										echo  "</td>";
 										 	
 									echo "</tr>";	
@@ -253,7 +254,7 @@ session_start();
 				 	 if(empty($formErrors)) {
 
 				 	 	// check if user exist 
-				 	 	$check = checkItem("Username", "Users", $username);
+				 	 	$check = checkItem("Username", "users", $username);
 
 				 	 	if ($check == 1)  {
 
@@ -262,8 +263,8 @@ session_start();
 				 	 		redirectHome($theMsg, 'back');
 
 				 	 	} else {
-					 	 	// insert the DB with this info
-					 	 	$stmt = $conn->prepare("INSERT INTO Users (Username, Password, Email, FullName, RegStatus, Date) 
+					 	 	// insert the user in DB with this info
+					 	 	$stmt = $conn->prepare("INSERT INTO users (Username, Password, Email, FullName, RegStatus, Date) 
 					 	 		VALUES (:zname, :zpass, :zmail, :zfull, 1, now())"); 
 
 					 	 	$stmt->execute(array(
@@ -313,7 +314,7 @@ session_start();
 
 				//check if UserID exist in DB
 
-				$stmt = $conn->prepare("SELECT *  FROM  Users  WHERE  UserID = ? LIMIT 1");  //means 1 result
+				$stmt = $conn->prepare("SELECT *  FROM  users  WHERE  UserID = ? LIMIT 1");  //means 1 result
 
 				$stmt->execute(array($userid));
 				$row = $stmt->fetch();   //to get data from DB and put it in $row which is an array 
@@ -335,7 +336,7 @@ session_start();
 				 	<form class="form-horizontal" method="POST" action="?do=Update" > 
 						
 						<!-- send also id -->
-						<input type="hidden" name="userid" value="<?php echo $row['UserID']; ?>">
+						<input type="hidden" name="userid" value="<?php echo $userid; ?>">
 
 				 		<!-- Start Username field-->
 				 		<div class="form-group form-group-lg">
@@ -486,7 +487,7 @@ session_start();
 					 	if(empty($formErrors)) {
 					 		//update the DB with this info
 
-						 	$stmt = $conn->prepare("UPDATE  Users  SET  Username = ?, Email = ?, FullName = ?, Password = ? WHERE UserID = ?");  //means 1 result
+						 	$stmt = $conn->prepare("UPDATE  users  SET  Username = ?, Email = ?, FullName = ?, Password = ? WHERE UserID = ?");  //means 1 result
 
 							$stmt->execute(array($username, $email, $fullname, $pass, $userid));
 							
@@ -539,7 +540,7 @@ session_start();
 
 					// check if UserID exist in DB with the function
 
-					$check = checkItem('UserID', 'Users', $userid); 
+					$check = checkItem('UserID', 'users', $userid); 
 
 					// echo $check;
 					
@@ -547,7 +548,7 @@ session_start();
 					//if ($count > 0 )
 					if ($check > 0 ) {  
 
-						$stmt = $conn->prepare("DELETE FROM Users WHERE UserID = :zuser");  //means 1 result
+						$stmt = $conn->prepare("DELETE FROM users WHERE UserID = :zuser");  //means 1 result
 
 						$stmt->bindParam(":zuser", $userid);
 
@@ -555,7 +556,7 @@ session_start();
 							
 						$theMsg = "<div class='alert alert-success'>" . $stmt-> rowCount() . " record is deleted </div>";
 
-						redirectHome($theMsg);
+						redirectHome($theMsg, 'back');
 
 				 	} else {
 
@@ -586,7 +587,7 @@ session_start();
 					//if ($count > 0 )
 					if ($check > 0 ) {  
 
-						$stmt = $conn->prepare("UPDATE  Users SET RegStatus = 1 WHERE UserID = ? ");  
+						$stmt = $conn->prepare("UPDATE  users SET RegStatus = 1 WHERE UserID = ? ");  
 
 						$stmt->execute(array($userid));
 							
@@ -616,4 +617,6 @@ session_start();
 			exit();
 		}
 
+
+	ob_end_flush();
  ?>

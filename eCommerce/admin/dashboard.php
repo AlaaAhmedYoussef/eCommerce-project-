@@ -4,9 +4,9 @@
 
 	session_start();
 		
-		if (isset($_SESSION['Username'])) {
+		$pageTitle ='Dashboard';
 
-			$pageTitle ='Dashboard';
+		if (isset($_SESSION['Username'])) {
 
 			include 'init.php';
 
@@ -25,7 +25,7 @@
 
 			$lastestUsers = 6;   //the number of lastest users to show
 
-			$theLatest = getLatest('*', 'Users', 'UserID', $lastestUsers);
+			$theLatest = getLatest('*', 'users', 'UserID', $lastestUsers);
 
 			?>
 			
@@ -36,13 +36,13 @@
 						<div class="col-md-3">
 							<div class="stat st-members">
 								Total Members
-								<span><a href="members.php"><?php echo countItems('UserID', 'Users');  ?></a></span>
+								<span><a href="members.php"><?php echo countItems('UserID', 'users');  ?></a></span>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="stat st-pending">
 								Pending Members
-								<span><a href="members.php?do=Manage&page=Pending"> <?php echo checkItem('RegStatus', 'Users', 0); ?></a></span>
+								<span><a href="members.php?do=Manage&page=Pending"> <?php echo checkItem('RegStatus', 'users', 0); ?></a></span>
 							</div>
 						</div>					
 						<div class="col-md-3">
