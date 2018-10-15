@@ -291,7 +291,7 @@
 
 					$theMsg = "<div class='alert alert-danger'> Sorry you can't browser this page directly </div>" ; 
 
-					redirectHome($theMsg, 'back');
+					redirectHome($theMsg);
 
 					echo "</div>";
 				}

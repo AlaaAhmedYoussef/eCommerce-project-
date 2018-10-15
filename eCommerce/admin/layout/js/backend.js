@@ -2,6 +2,14 @@ $(function () {
 
 	'use strict';
 
+	// Trigger the SelectBoxIt
+
+	  $("select").selectBoxIt({
+
+	  	autoWidth: false
+	  	
+	  });
+
 	// Hide PlaceHolder On Form Focus
 
 	$('[placeholder]').focus(function (){

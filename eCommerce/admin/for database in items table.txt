@@ -1,0 +1,32 @@
+// relation between items and users
+
+ALTER TABLE items
+
+ADD CONSTRAINT member_1
+
+FOREIGN KEY(Member_ID)
+
+REFERENCES users(UserID)
+
+ON UPDATE CASCADE
+
+ON DELETE CASCADE;
+
+
+
+notes should all DB be empty  .. items only required to be empty
+
+
+// relation between items and categories
+
+ALTER TABLE items
+
+ADD CONSTRAINT cat_1
+
+FOREIGN KEY(Cat_ID)
+
+REFERENCES categories(ID)
+
+ON UPDATE CASCADE
+
+ON DELETE CASCADE;
