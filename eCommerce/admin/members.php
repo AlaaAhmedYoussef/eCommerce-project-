@@ -76,7 +76,7 @@
 
 										 	if($row['RegStatus'] == 0)  {
 
-										 	echo "<a href='members.php?do=Activate&userid=" . $row['UserID'] . " ' class='btn btn-info activate'><i class='fa fa-close'></i> Activate</a>";
+										 	echo "<a href='members.php?do=Activate&userid=" . $row['UserID'] . " ' class='btn btn-info activate'><i class='fa fa-check'></i> Activate</a>";
 
 										     	}
 
@@ -579,7 +579,7 @@
 					
 					// check if UserID exist in DB with the function
 
-					$check = checkItem('UserID', 'Users', $userid); 
+					$check = checkItem('UserID', 'users', $userid); 
 
 					// echo $check;
 					
