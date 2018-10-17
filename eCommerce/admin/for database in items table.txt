@@ -1,4 +1,4 @@
-// relation between items and users
+// relation between items and users  in shop sql
 
 ALTER TABLE items
 
@@ -30,3 +30,6 @@ REFERENCES categories(ID)
 ON UPDATE CASCADE
 
 ON DELETE CASCADE;
+
+
+// also  relation between comments with  (users, items)  in shop sql

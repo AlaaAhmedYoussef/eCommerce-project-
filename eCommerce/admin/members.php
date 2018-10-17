@@ -40,11 +40,13 @@
 
 				// get all data fro DB to use it 
 
-				$stmt = $conn->prepare("SELECT * FROM users WHERE  GroupID != 1 $query"); 
+				$stmt = $conn->prepare("SELECT * FROM users WHERE  GroupID != 1 $query ORDER BY UserID DESC"); 
 
 				 $stmt->execute();
 
 				 $rows = $stmt->fetchAll();
+
+				 if(! empty($rows)) {
 
 				?> 
 			
@@ -86,15 +88,21 @@
 								}
 								
 							 ?>
-							
-
-							
+												
 						</table>
 					</div>
 					
 		
 					<a href='members.php?do=Add' class="btn btn-primary"> <i class="fa fa-plus"></i> New Member</a>
 				</div>
+
+				<?php } else {
+					echo '<div class="container">';
+						echo '<div class="nice-message">There\'s No Categories To Show</div>';
+						echo '<a href="members.php?do=Add" class="btn btn-primary">
+								<i class="fa fa-plus"></i> New Member</a>';
+					echo '</div>';
+				} ?>
 
 			<?php  } elseif ($do == 'Add') {  //Add members page ?>
 				
@@ -265,7 +273,7 @@
 				 	 	} else {
 					 	 	// insert the user in DB with this info
 					 	 	$stmt = $conn->prepare("INSERT INTO users (Username, Password, Email, FullName, RegStatus, Date) 
-					 	 		VALUES (:zname, :zpass, :zmail, :zfull, 1, now())"); 
+					 	 		VALUES (:zname, :zpass, :zmail, :zfull, 0, now())"); 
 
 					 	 	$stmt->execute(array(
 							 	
@@ -391,8 +399,10 @@
 				 			</div>	
 				 		</div>
 				 		<!-- End submit field-->
-
 				 	</form>
+
+					
+
 				 </div>
 			<?php  
 			// if this id not exist
@@ -485,6 +495,22 @@
 					 	// if there is no error update to DB
 
 					 	if(empty($formErrors)) {
+
+					 		$stmt2 = $conn->prepare('SELECT * FROM users 
+					 			WHERE Username = ? AND UserID != ?');
+
+					 		$stmt2->execute(array($username, $userid));
+
+					 		$count = $stmt2->rowCount();
+
+					 		if ($count == 1) {
+
+					 			$theMsg = "<div class='alert alert-danger'>Sorry This User is Exist</div>";
+
+					 			redirectHome($theMsg, 'back');
+
+					 		} else {
+
 					 		//update the DB with this info
 
 						 	$stmt = $conn->prepare("UPDATE  users  SET  Username = ?, Email = ?, FullName = ?, Password = ? WHERE UserID = ?");  //means 1 result
@@ -494,6 +520,8 @@
 							$theMsg = "<div class='alert alert-success'>" . $stmt-> rowCount() . " record is updated </div>";
 
 							redirectHome($theMsg, 'back');
+
+							}
 
 					 	}
 					 	

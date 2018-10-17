@@ -36,7 +36,10 @@
 
 				$stmt2->execute();
 
-				$cats = $stmt2->fetchAll();  ?>
+				$cats = $stmt2->fetchAll();  
+
+				if(! empty($cats))  {
+				?>
 
 				<h1 class="text-center">Manage Categories</h1>
 				<div class="container categories">
@@ -79,7 +82,14 @@
 					</div>
 					<a href="categories.php?do=Add" class="add-category btn btn-primary"><i class="fa fa-plus"></i>Add New Category</a>
 				</div>
-
+				
+				<?php } else {
+					echo '<div class="container">';
+						echo '<div class="nice-message">There\'s No Categories To Show</div>';
+						echo '<a href="categories.php?do=Add" class="btn btn-primary">
+								<i class="fa fa-plus"></i> New Category</a>';
+					echo '</div>';
+				} ?>
 
 
 

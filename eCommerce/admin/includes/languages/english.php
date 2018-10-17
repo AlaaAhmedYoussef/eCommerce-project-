@@ -13,6 +13,7 @@
 			'CATEGORIES' 	=> 'Categories' ,
 			'ITEMS' 		=> 'items' ,
  			'MEMBERS' 		=> 'Members' ,
+ 			'COMMENTS' 		=> 'Comments' ,
  			'STATISTICS' 		=> 'Statistics' ,
  			'LOGS' 		=> 'Logs' ,
 
