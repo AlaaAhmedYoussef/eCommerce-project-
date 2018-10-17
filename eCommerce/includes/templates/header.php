@@ -13,10 +13,16 @@
 	<body>
 	<div class="upper-bar">
 		<div class="container">
-		Upper Bar
+		<?php 
+
+		if (isset($_SESSION['user'])) {
+			echo "welcome " . $_SESSION['user'];	
+		} else {
+		?>
 		<a href="login.php">
 				<span class="pull-right">Login/Signup</span>
 			</a>
+		<?php  }  ?>
 		</div>
 	</div>
 	<nav class="navbar navbar-inverse">

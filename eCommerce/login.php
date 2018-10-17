@@ -6,6 +6,41 @@
 		header('Location: index.php');
 	}
 	include 'init.php';
+
+	// Check IF USER Coming from HTTP Post Request
+
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		
+		$user = $_POST['username'];
+		$pass = $_POST['password'];
+		$hashedPass = sha1($pass);
+
+		//check if User exist in DB
+
+		$stmt = $conn->prepare("SELECT 
+						 Username, Password 
+					     FROM 
+					     	users 
+					     WHERE 
+					     	Username = ?
+					     AND 
+					     	Password = ? ");  
+
+		$stmt->execute(array($user, $hashedPass));
+		
+		$count = $stmt->rowCount();
+
+		//if count > 0 this mean the DB contains record for this userrname
+
+		if ($count > 0 ) {
+
+			$_SESSION['user'] = $user;  // Register session name
+			
+			header('Location: index.php'); //redirect to home page
+			exit();
+		}
+	 }
+
 ?>
 
 	<div class="container login-page">
@@ -86,7 +121,7 @@
 
 
 	</div>
-	
+
 <?php 
 	include $tpl . 'footer.php';
 	ob_end_flush();
