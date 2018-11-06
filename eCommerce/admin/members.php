@@ -273,7 +273,7 @@
 				 	 	} else {
 					 	 	// insert the user in DB with this info
 					 	 	$stmt = $conn->prepare("INSERT INTO users (Username, Password, Email, FullName, RegStatus, Date) 
-					 	 		VALUES (:zname, :zpass, :zmail, :zfull, 0, now())"); 
+					 	 		VALUES (:zname, :zpass, :zmail, :zfull, 1, now())"); 
 
 					 	 	$stmt->execute(array(
 							 	

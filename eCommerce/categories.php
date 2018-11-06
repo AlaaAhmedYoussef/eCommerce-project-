@@ -4,7 +4,7 @@
 	<h1 class="text-center"><?php echo str_replace('-', ' ', $_GET['pagename']); ?></h1>
 	<?php 
 			
-		        	foreach (getItems($_GET['pageid']) as $item) {
+		        	foreach (getItems('Cat_ID', $_GET['pageid']) as $item) {
 		        			
 		        		// echo '<li><a href="items.php?pageid=' . $item['ID']. '&pagename=' . str_replace(' ', '-', $item['Name']) . ' ">' . $item['Name'] . '</a></li>';
 		        		echo '<div class="col-sm-6 col-md-3">';

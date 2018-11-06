@@ -15,8 +15,21 @@
 		<div class="container">
 		<?php 
 
-		if (isset($_SESSION['user'])) {
-			echo "welcome " . $_SESSION['user'];	
+		if (isset($_SESSION['user'])) {  //dont write here $sessionUser bec the variable is exist
+
+			echo "welcome " . $sessionUser;
+			
+			echo "<a href='profile.php'>My Profile</a>";
+
+			echo " - <a href='logout.php'>Logout</a>";
+
+			$userStatus = checkUserStatus($sessionUser);
+
+			//here 1 mean not activated
+			if ($userStatus == 1)  {
+				echo "your membership need to be activated";
+			}
+
 		} else {
 		?>
 		<a href="login.php">

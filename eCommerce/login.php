@@ -11,33 +11,40 @@
 
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		
-		$user = $_POST['username'];
-		$pass = $_POST['password'];
-		$hashedPass = sha1($pass);
+		if (isset($_POST['login']))  {
 
-		//check if User exist in DB
+			$user = $_POST['username'];
+			$pass = $_POST['password'];
+			$hashedPass = sha1($pass);
 
-		$stmt = $conn->prepare("SELECT 
-						 Username, Password 
-					     FROM 
-					     	users 
-					     WHERE 
-					     	Username = ?
-					     AND 
-					     	Password = ? ");  
+			//check if User exist in DB
 
-		$stmt->execute(array($user, $hashedPass));
-		
-		$count = $stmt->rowCount();
+			$stmt = $conn->prepare("SELECT 
+							 Username, Password 
+						     FROM 
+						     	users 
+						     WHERE 
+						     	Username = ?
+						     AND 
+						     	Password = ? ");  
 
-		//if count > 0 this mean the DB contains record for this userrname
-
-		if ($count > 0 ) {
-
-			$_SESSION['user'] = $user;  // Register session name
+			$stmt->execute(array($user, $hashedPass));
 			
-			header('Location: index.php'); //redirect to home page
-			exit();
+			$count = $stmt->rowCount();
+
+			//if count > 0 this mean the DB contains record for this userrname
+
+			if ($count > 0 ) {
+
+				$_SESSION['user'] = $user;  // Register session name
+				
+				header('Location: index.php'); //redirect to home page
+				exit();
+			}
+
+		} else 	{ 
+
+			$test = $_POST['username'];
 		}
 	 }
 
@@ -114,8 +121,10 @@
 			<input class="btn btn-success btn-block" name="signup" type="submit" value="Signup" />
 		</form>
 		<!-- End Signup Form -->
-
-
+		<div class="the-errors text-center">
+		<?php echo $test; ?>	
+		</div>
+		
 
 
 

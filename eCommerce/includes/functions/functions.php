@@ -23,19 +23,65 @@
 	/* getItems()  v1.0	
 	this function get the lastest items only 
 	*/
-	function getItems($catID)
+	// function getItems($catID)
+	// {
+		
+	// 	global $conn; // should use the global $conn from the connect.php
+
+	// 	$getItems = $conn->prepare("SELECT * FROM items WHERE Cat_ID = ? ORDER BY Item_ID DESC");
+
+	// 	$getItems->execute(array($catID));
+
+	// 	$items = $getItems->fetchAll();
+
+	// 	return $items;
+	// }
+
+	/* getItems()  v2.0	
+	this function get the lastest items only 
+	by memberID or by categoryID
+	*/
+	function getItems($where, $value)
 	{
 		
 		global $conn; // should use the global $conn from the connect.php
 
-		$getItems = $conn->prepare("SELECT * FROM items WHERE Cat_ID = ? ORDER BY Item_ID DESC");
+		$getItems = $conn->prepare("SELECT * FROM items WHERE $where = ? ORDER BY Item_ID DESC");
 
-		$getItems->execute(array($catID));
+		$getItems->execute(array($value));
 
 		$items = $getItems->fetchAll();
 
 		return $items;
 	}
+
+
+	/* checkUserStatus()  v1.0	[accept parameters]
+	this function to check the regStatus of te user
+	*/
+
+	function checkUserStatus($user) {
+
+		global $conn; // should use the global $conn from the connect.php
+
+		//check if User exist in DB
+
+		$stmtx = $conn->prepare("SELECT 
+						 Username, RegStatus
+					     FROM 
+					     	users 
+					     WHERE 
+					     	Username = ?
+					     AND 
+					     	RegStatus = 0 ");  
+
+		$stmtx->execute(array($user));
+		
+		$status = $stmtx->rowCount();
+
+		return $status;
+	}
+
 
 	/*
 	getTitle()  v1.0
