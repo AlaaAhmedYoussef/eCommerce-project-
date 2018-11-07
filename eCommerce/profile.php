@@ -1,4 +1,5 @@
 <?php 
+	ob_start();
 	session_start();
 
 	$pageTitle = 'Profile';
@@ -55,10 +56,12 @@
 <!-- <div id="my-ads" class="my-ads block"> -->
 	<div class="container">
 		<div class="panel panel-primary">
-			<div class="panel-heading">My Items</div>
+			<div class="panel-heading">My Ads</div>
 			<div class="panel-body">
 			<?php
 
+				if (! empty(getItems('Member_ID', $info['UserID']))) {
+					echo '<div class="row">';
 				foreach (getItems('Member_ID', $info['UserID']) as $item) {
 		        			
 		        		// echo '<li><a href="items.php?pageid=' . $item['ID']. '&pagename=' . str_replace(' ', '-', $item['Name']) . ' ">' . $item['Name'] . '</a></li>';
@@ -75,6 +78,9 @@
 				echo '</div>';
 				
 		        	}
+		        	} else {
+					echo 'Sorry There\' No Ads To Show, Create <a href="newad.php">New Ad</a>';
+				}
 
 
 				// $myItems = getAllFrom("*", "items", "where Member_ID = $userid", "", "Item_ID");
@@ -153,5 +159,7 @@
  		header('Location: login.php');
 
  		exit();
- 	}	
+ 	}
+
+ 	ob_end_flush();
 ?>

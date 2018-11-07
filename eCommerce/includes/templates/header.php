@@ -17,9 +17,11 @@
 
 		if (isset($_SESSION['user'])) {  //dont write here $sessionUser bec the variable is exist
 
-			echo "welcome " . $sessionUser;
+			echo "welcome " . $sessionUser . '  ';
 			
 			echo "<a href='profile.php'>My Profile</a>";
+
+			echo " - <a href='newad.php'>New Ad</a>";
 
 			echo " - <a href='logout.php'>Logout</a>";
 

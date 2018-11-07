@@ -74,7 +74,32 @@ $(function () {
 	 	
 	 });
 
+	//live change for ads here using data-class
+	$('.live').keyup(function () {
+
+		$($(this).data('class')).text($(this).val());
+
+	});
+
+	live for name
+	$('.live-name').keyup(function () {
+
+		$('.live-preview .caption h3').text($(this).val());
+
+	 });
 	
+
+	$('.live-desc').keyup(function () {
+
+		$('.live-preview .caption p').text($(this).val());
+
+	 });
+
+	$('.live-price').keyup(function () {
+
+		$('.live-preview .price-tag').text('$' + $(this).val());
+
+	 });
 });
 
 
