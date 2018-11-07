@@ -128,7 +128,7 @@
 	$url = the link you want ro redirect to 
 	$seconds = wait seconds before redirecting 
 	*/
-		function redirectHome($theMsg, $url = null, $seconds = 3)   {
+	function redirectHome($theMsg, $url = null, $seconds = 3)   {
 
 		if ($url === null)  {
 			
