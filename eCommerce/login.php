@@ -20,7 +20,7 @@
 			//check if User exist in DB
 
 			$stmt = $conn->prepare("SELECT 
-							 Username, Password 
+							 UserID, Username, Password 
 						     FROM 
 						     	users 
 						     WHERE 
@@ -29,6 +29,8 @@
 						     	Password = ? ");  
 
 			$stmt->execute(array($user, $hashedPass));
+
+			$get = $stmt->fetch();
 			
 			$count = $stmt->rowCount();
 
@@ -37,8 +39,11 @@
 			if ($count > 0 ) {
 
 				$_SESSION['user'] = $user;  // Register session name
+
+				$_SESSION['uid'] = $get['UserID']; //Register User ID in session
 				
 				header('Location: index.php'); //redirect to home page
+
 				exit();
 			}
 
