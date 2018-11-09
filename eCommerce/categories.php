@@ -1,7 +1,8 @@
 <?php  include "init.php"; ?>
 
 <div class="container">
-	<h1 class="text-center"><?php echo str_replace('-', ' ', $_GET['pagename']); ?></h1>
+	<!-- <h1 class="text-center"><?php echo str_replace('-', ' ', $_GET['pagename']); ?></h1> -->
+	<h1 class="text-center">Show Category</h1>
 	<?php 
 			
 		        	foreach (getItems('Cat_ID', $_GET['pageid']) as $item) {

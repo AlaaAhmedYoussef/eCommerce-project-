@@ -321,7 +321,7 @@
 
 			} elseif ($do == 'Edit') {  //edit items page 
 
-				
+				//check if Get request item is numerical & get its integer value
 				$itemid = isset($_GET['itemid']) && is_numeric($_GET['itemid']) ? intval($_GET['itemid']) : 0;
 				
 				//check if Item_ID exist in DB

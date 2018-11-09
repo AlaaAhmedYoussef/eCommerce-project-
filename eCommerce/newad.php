@@ -8,7 +8,7 @@ if (isset($_SESSION['user']))  {
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$formErrors = array();
-			$name 		= filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+			$name 	= filter_var($_POST['name'], FILTER_SANITIZE_STRING);
 			$desc 		= filter_var($_POST['description'], FILTER_SANITIZE_STRING);
 			$price 		= filter_var($_POST['price'], FILTER_SANITIZE_NUMBER_INT);
 			$country 	= filter_var($_POST['country'], FILTER_SANITIZE_STRING);
